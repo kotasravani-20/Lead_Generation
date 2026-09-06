@@ -1,6 +1,16 @@
 import { APIResponse, ScoringWeights, Lead } from '../types/lead';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+const getApiBaseUrl = () => {
+  if (process.env.NEXT_PUBLIC_API_URL) {
+    return process.env.NEXT_PUBLIC_API_URL;
+  }
+  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    return '';
+  }
+  return 'http://localhost:8000';
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 export async function getDemoLeads(): Promise<APIResponse> {
   const response = await fetch(`${API_BASE_URL}/api/demo-leads`, {
